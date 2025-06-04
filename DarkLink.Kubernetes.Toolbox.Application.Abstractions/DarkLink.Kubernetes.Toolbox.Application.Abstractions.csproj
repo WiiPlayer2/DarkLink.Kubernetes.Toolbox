@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>DarkLink.Kubernetes.Toolbox.Application</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../DarkLink.Kubernetes.Toolbox.Domain/DarkLink.Kubernetes.Toolbox.Domain.csproj"/>
+    </ItemGroup>
+
+</Project>
