@@ -2,6 +2,7 @@
 using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
 using System.CommandLine.Parsing;
+using DarkLink.Kubernetes.Toolbox.Application;
 using DarkLink.Kubernetes.Toolbox.Cli;
 using LanguageExt.Effects.Traits;
 using LanguageExt.Sys.Live;
@@ -16,9 +17,9 @@ return await new CommandLineBuilder(new RootCommand()
     .UseDefaults()
     .UseHost(
         args => new HostBuilder().ConfigureDefaults(args),
-        hostBuilder => hostBuilder
+        hostBuilder => UseCommandHandlers<Runtime>(hostBuilder)
+            .ConfigureServices(services => services.AddSingleton(new CommandRuntime<Runtime>(Runtime.New())))
             .ConfigureServices(ConfigureServices<Runtime>)
-            .UseCommandHandler<DependenciesCommand.NfsCommand, DependenciesNfsCommandHandler>()
             .ConfigureLogging(loggingBuilder => loggingBuilder
                 .AddFilter("Microsoft", LogLevel.Warning)
                 .AddFilter("DarkLink", LogLevel.Debug)
@@ -26,7 +27,11 @@ return await new CommandLineBuilder(new RootCommand()
     .Build()
     .InvokeAsync(args);
 
+IHostBuilder UseCommandHandlers<RT>(IHostBuilder hostBuilder) where RT : struct, HasCancel<RT> => hostBuilder
+    .UseCommandHandler<DependenciesCommand.NfsCommand, DependenciesNfsCommandHandler<RT>>();
+
 void ConfigureServices<RT>(HostBuilderContext hostContext, IServiceCollection services)
     where RT : struct, HasCancel<RT>
 {
+    services.AddApplicationServices<RT>();
 }

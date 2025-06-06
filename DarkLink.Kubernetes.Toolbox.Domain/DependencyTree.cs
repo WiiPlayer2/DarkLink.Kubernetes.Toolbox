@@ -1,3 +1,3 @@
 ﻿namespace DarkLink.Kubernetes.Toolbox.Domain;
 
-public class Class1 { }
+public record DependencyTree { }
