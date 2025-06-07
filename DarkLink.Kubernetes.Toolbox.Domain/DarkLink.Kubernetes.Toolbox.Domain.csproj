@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FunicularSwitch.Generators" Version="4.*">
+        <PackageReference Include="FunicularSwitch.Generators" Version="4.2.3">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="LanguageExt.Core" Version="4.*"/>
-        <PackageReference Include="Vogen" Version="4.*"/>
+        <PackageReference Include="Vogen" Version="7.0.4" />
     </ItemGroup>
 </Project>
