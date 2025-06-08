@@ -11,6 +11,9 @@ public class DependenciesCommand : Command
 
     public class NfsCommand : Command
     {
-        public NfsCommand() : base("nfs") { }
+        public NfsCommand() : base("nfs")
+        {
+            Add(DarkLink.Kubernetes.Toolbox.Cli.Options.StorageClasses);
+        }
     }
 }

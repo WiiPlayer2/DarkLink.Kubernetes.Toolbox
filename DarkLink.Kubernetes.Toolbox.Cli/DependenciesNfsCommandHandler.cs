@@ -4,6 +4,7 @@ using DarkLink.Kubernetes.Toolbox.Application;
 using DarkLink.Kubernetes.Toolbox.Domain;
 using LanguageExt.Effects.Traits;
 using Microsoft.Extensions.Logging;
+using Array = System.Array;
 
 namespace DarkLink.Kubernetes.Toolbox.Cli;
 
@@ -16,7 +17,10 @@ public class DependenciesNfsCommandHandler<RT>(
 
     public Task<int> InvokeAsync(InvocationContext context) =>
     (
-        from dependencyTree in useCase.Run()
+        from relevantStorageClasses in Eff(() => (context.ParseResult.GetValueForOption(Options.StorageClasses) ?? [])
+            .Select(StorageClassName.From)
+            .ToSeq())
+        from dependencyTree in useCase.Run(relevantStorageClasses)
         from _ in PrintTree(dependencyTree)
         select unit
     ).RunCommand(commandRuntime, logger);
