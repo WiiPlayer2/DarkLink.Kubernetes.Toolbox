@@ -1,6 +1,7 @@
 using System;
 using System.CommandLine.Invocation;
 using DarkLink.Kubernetes.Toolbox.Application;
+using DarkLink.Kubernetes.Toolbox.Domain;
 using LanguageExt.Effects.Traits;
 using Microsoft.Extensions.Logging;
 
@@ -15,7 +16,28 @@ public class DependenciesNfsCommandHandler<RT>(
 
     public Task<int> InvokeAsync(InvocationContext context) =>
     (
-        from _ in useCase.Run()
+        from dependencyTree in useCase.Run()
+        from _ in PrintTree(dependencyTree)
         select unit
     ).RunCommand(commandRuntime, logger);
+
+    private Eff<Unit> PrintTree(DependencyTree tree) => Eff(fun(() =>
+    {
+        foreach (var pod in tree.Pods)
+        {
+            Console.WriteLine($"{pod.Key.Metadata.Namespace}/{pod.Key.Metadata.Name}");
+            for (var i = 0; i < pod.Value.Dependencies.Count; i++)
+            {
+                if(i == pod.Value.Dependencies.Count - 1)
+                    Console.Write('┗');
+                else
+                    Console.Write('┣');
+
+                var dependencyText = pod.Value.Dependencies[i].Match(
+                    pvc => $"[PVC] {pvc.PersistentVolumeClaim.Metadata.Name} ({pvc.PersistentVolumeClaim.StorageClassName})",
+                    mount => throw new NotImplementedException());
+                Console.WriteLine($" {dependencyText}");
+            }
+        }
+    }));
 }

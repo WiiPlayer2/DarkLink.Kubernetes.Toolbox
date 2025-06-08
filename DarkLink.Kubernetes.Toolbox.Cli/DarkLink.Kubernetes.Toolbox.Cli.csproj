@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <ProjectReference Include="../DarkLink.Kubernetes.Toolbox.Application/DarkLink.Kubernetes.Toolbox.Application.csproj"/>
+        <ProjectReference Include="..\DarkLink.Kubernetes.Toolbox.Demo\DarkLink.Kubernetes.Toolbox.Demo.csproj" />
     </ItemGroup>
 
     <ItemGroup>
