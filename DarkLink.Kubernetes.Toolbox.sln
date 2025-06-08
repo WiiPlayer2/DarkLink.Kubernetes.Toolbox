@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarkLink.Kubernetes.Toolbox
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarkLink.Kubernetes.Toolbox.Demo", "DarkLink.Kubernetes.Toolbox.Demo\DarkLink.Kubernetes.Toolbox.Demo.csproj", "{DD22378D-7186-43A8-8806-6BE00A9CC567}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarkLink.Kubernetes.Toolbox.KubernetesClient", "DarkLink.Kubernetes.Toolbox.KubernetesClient\DarkLink.Kubernetes.Toolbox.KubernetesClient.csproj", "{4453CDDC-83BC-449A-A3E7-0E5C14A212FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{DD22378D-7186-43A8-8806-6BE00A9CC567}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD22378D-7186-43A8-8806-6BE00A9CC567}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD22378D-7186-43A8-8806-6BE00A9CC567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4453CDDC-83BC-449A-A3E7-0E5C14A212FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4453CDDC-83BC-449A-A3E7-0E5C14A212FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4453CDDC-83BC-449A-A3E7-0E5C14A212FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4453CDDC-83BC-449A-A3E7-0E5C14A212FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F9468D58-FB2C-4159-8194-62F94011B387} = {6AB724F5-DC67-42E2-BD80-6A0C57084C23}
@@ -61,5 +67,6 @@ Global
 		{0AE670A6-7056-45CE-B1A6-3FDE88FD013F} = {E73836F9-4497-4725-9DBC-C5307D81A335}
 		{4E068E3D-72B5-43A5-B2DA-F0D49654D336} = {18317733-4732-42F6-83D4-F27C5DADF423}
 		{DD22378D-7186-43A8-8806-6BE00A9CC567} = {A34B81D7-7319-4682-9C3B-9ACA66B0B73F}
+		{4453CDDC-83BC-449A-A3E7-0E5C14A212FF} = {A34B81D7-7319-4682-9C3B-9ACA66B0B73F}
 	EndGlobalSection
 EndGlobal

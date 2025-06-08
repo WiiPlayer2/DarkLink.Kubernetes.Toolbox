@@ -5,6 +5,7 @@ using System.CommandLine.Parsing;
 using DarkLink.Kubernetes.Toolbox.Application;
 using DarkLink.Kubernetes.Toolbox.Cli;
 using DarkLink.Kubernetes.Toolbox.Demo;
+using DarkLink.Kubernetes.Toolbox.KubernetesClient;
 using LanguageExt.Effects.Traits;
 using LanguageExt.Sys.Live;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +38,8 @@ void ConfigureServices<RT>(HostBuilderContext hostContext, IServiceCollection se
 #if DEBUG
     services.AddDemoServices<RT>();
 #endif
+
+    services.AddKubernetesClient<RT>();
     
     services.AddApplicationServices<RT>();
 }

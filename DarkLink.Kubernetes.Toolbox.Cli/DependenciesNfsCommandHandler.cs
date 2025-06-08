@@ -39,7 +39,7 @@ public class DependenciesNfsCommandHandler<RT>(
 
                 var dependencyText = pod.Value.Dependencies[i].Match(
                     pvc => $"[PVC] {pvc.PersistentVolumeClaim.Metadata.Name} ({pvc.PersistentVolumeClaim.StorageClassName})",
-                    mount => throw new NotImplementedException());
+                    mount => $"[NFS] {mount.Nfs.Server}");
                 Console.WriteLine($" {dependencyText}");
             }
         }
