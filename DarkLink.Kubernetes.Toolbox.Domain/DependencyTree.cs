@@ -12,4 +12,4 @@ public abstract partial record NfsDependency
 
 public record PodDependency(Seq<NfsDependency> Dependencies);
 
-public record DependencyTree;
+public record DependencyTree(Map<Pod, PodDependency> Pods);
