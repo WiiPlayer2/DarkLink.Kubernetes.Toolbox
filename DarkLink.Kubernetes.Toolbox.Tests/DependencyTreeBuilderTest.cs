@@ -134,4 +134,27 @@ public class DependencyTreeBuilderTest
         // Assert
         result.Should().BeEquivalentTo(expected);
     }
+
+    [TestMethod]
+    public void Build_WithSinglePodWithNfsVolume_ReturnsOnlyThisDependency()
+    {
+        // Arrange
+        var pods = Seq(
+            new Pod(new(ResourceName.From("pod"), ResourceNamespace.From("ns")))
+            {
+                Volumes =
+                [
+                    PodVolume.Nfs(Hostname.From("nfs.server")),
+                ],
+            },
+            new Pod(new(ResourceName.From("pod2"), ResourceNamespace.From("ns"))));
+        var pvcs = Seq<PersistentVolumeClaim>();
+        var expected = new DependencyTree(Map((pods.Head, new PodDependency(Seq1(NfsDependency.Mount((PodVolume.Nfs_) pods.Head.Volumes.Head()))))));
+        
+        // Act
+        var result = DependencyTreeBuilder.Build(pods, pvcs);
+
+        // Assert
+        result.Should().BeEquivalentTo(expected);
+    }
 }

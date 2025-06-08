@@ -7,7 +7,7 @@ public abstract partial record NfsDependency
 {
     public record Pvc_(PersistentVolumeClaim PersistentVolumeClaim) : NfsDependency;
 
-    public record Mount_ : NfsDependency;
+    public record Mount_(PodVolume.Nfs_ Nfs) : NfsDependency;
 }
 
 public record PodDependency(Seq<NfsDependency> Dependencies);

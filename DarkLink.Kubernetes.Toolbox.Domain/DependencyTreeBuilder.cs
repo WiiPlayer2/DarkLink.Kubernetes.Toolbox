@@ -13,6 +13,9 @@ public static class DependencyTreeBuilder
                             .OfType<PodVolume.PersistentVolumeClaim_>()
                             .Any(z => z.Name == y.Metadata.Name && x.Metadata.Namespace == y.Metadata.Namespace))
                         .Select(NfsDependency.Pvc)
+                        .Concat(x.Volumes
+                            .OfType<PodVolume.Nfs_>()
+                            .Select(NfsDependency.Mount))
                         .ToSeq()))
                 .Where(x => x.Value.Dependencies.Any())
                 .ToMap());
