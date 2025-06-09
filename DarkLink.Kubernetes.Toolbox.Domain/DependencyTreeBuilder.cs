@@ -5,7 +5,7 @@ public static class DependencyTreeBuilder
     public static DependencyTree Build(Seq<Pod> pods, Seq<PersistentVolumeClaim> pvcs, Option<Seq<StorageClassName>> relevantStorageClassses = default)
     {
         return new(
-            pods.ToDictionary(
+            (pods.Where(x => x.Status.Phase.Value == "Running")).ToDictionary(
                     x => x,
                     x => new PodDependency(pvcs
                         .Where(y => relevantStorageClassses.Match(classes => classes.Contains(y.StorageClassName), () => true))

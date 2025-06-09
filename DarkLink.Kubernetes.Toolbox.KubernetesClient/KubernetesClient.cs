@@ -20,6 +20,7 @@ public class KubernetesClient<RT>(k8s.Kubernetes k8s) : IKubernetesClient<RT> wh
                             : null)
                     .Where(x => x is not null)
                     .ToArr(),
+                Status = new PodStatus(PodStatusPhase.From(x.Status.Phase)),
             })
             .ToSeq()
         select mappedPods;

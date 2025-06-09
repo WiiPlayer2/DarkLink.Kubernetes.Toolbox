@@ -18,5 +18,12 @@ public record Pod(ResourceMetadata Metadata) : Resource(Metadata), IComparable<P
 {
     public IReadOnlyCollection<PodVolume> Volumes { get; init; } = [];
 
+    public PodStatus Status { get; init; } = new(PodStatusPhase.From("Running"));
+
     public int CompareTo(Pod? other) => Metadata.CompareTo(other?.Metadata);
 }
+
+[ValueObject<string>]
+public partial record PodStatusPhase;
+
+public record PodStatus(PodStatusPhase Phase);
