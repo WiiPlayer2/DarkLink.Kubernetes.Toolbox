@@ -1,29 +1,18 @@
-using Vogen;
-
 namespace DarkLink.Kubernetes.Toolbox.Domain;
 
-public record PersistentVolumeClaim(ResourceMetadata Metadata, StorageClassName StorageClassName) : Resource(Metadata);
-
-[ValueObject<string>]
-public partial record StorageClassName;
-
-[ValueObject<string>]
-public partial record ResourceName;
-
-[ValueObject<string>]
-public partial record ResourceNamespace;
-
-public record Resource(ResourceMetadata Metadata);
-
-public record ResourceMetadata(ResourceName Name, ResourceNamespace Namespace) : IComparable<ResourceMetadata>
+public record PersistentVolumeClaim(
+    ResourceMetadata Metadata,
+    StorageClassName StorageClassName,
+    PersistentVolumeClaimResources Resources
+    ) : Resource(Metadata)
 {
-    public int CompareTo(ResourceMetadata? other)
-    {
-        if (other is null) return 1;
-        
-        var namespaceComparison = Namespace.CompareTo(other.Namespace);
-        if (namespaceComparison != 0) return namespaceComparison;
-
-        return Name.CompareTo(other.Name);
-    }
+    [Obsolete]
+    public PersistentVolumeClaim(ResourceMetadata metadata, StorageClassName storageClassName)
+        : this(metadata, storageClassName, new(new(new(1, DataSizeUnit.Gigabyte)))) { }
+    
+    public Option<ResourceName> VolumeName { get; init; }
+    
+    public Option<VolumeMode> VolumeMode { get; init; }
+    
+    public Arr<VolumeAccessMode> AccessModes { get; init; }
 }
