@@ -8,11 +8,11 @@ public class DataSizeTest
     [DataRow(10U, DataSizeUnit.Gibibyte, "10Gi")]
     [DataRow(512U, DataSizeUnit.Gibibyte, "512Gi")]
     [DataRow(99999999U, DataSizeUnit.Gibibyte, "99999999Gi")]
-    [DataRow(0U, DataSizeUnit.Mibibyte, "0Mi")]
-    [DataRow(1U, DataSizeUnit.Mibibyte, "1Mi")]
-    [DataRow(10U, DataSizeUnit.Mibibyte, "10Mi")]
-    [DataRow(512U, DataSizeUnit.Mibibyte, "512Mi")]
-    [DataRow(99999999U, DataSizeUnit.Mibibyte, "99999999Mi")]
+    [DataRow(0U, DataSizeUnit.Mebibyte, "0Mi")]
+    [DataRow(1U, DataSizeUnit.Mebibyte, "1Mi")]
+    [DataRow(10U, DataSizeUnit.Mebibyte, "10Mi")]
+    [DataRow(512U, DataSizeUnit.Mebibyte, "512Mi")]
+    [DataRow(99999999U, DataSizeUnit.Mebibyte, "99999999Mi")]
     [TestMethod]
     public void ToString_WithGivenValues_ReturnsExpectedString(uint count, DataSizeUnit unit, string expected)
     {
@@ -31,11 +31,11 @@ public class DataSizeTest
     [DataRow(10U, DataSizeUnit.Gibibyte, "10Gi")]
     [DataRow(512U, DataSizeUnit.Gibibyte, "512Gi")]
     [DataRow(99999999U, DataSizeUnit.Gibibyte, "99999999Gi")]
-    [DataRow(0U, DataSizeUnit.Mibibyte, "0Mi")]
-    [DataRow(1U, DataSizeUnit.Mibibyte, "1Mi")]
-    [DataRow(10U, DataSizeUnit.Mibibyte, "10Mi")]
-    [DataRow(512U, DataSizeUnit.Mibibyte, "512Mi")]
-    [DataRow(99999999U, DataSizeUnit.Mibibyte, "99999999Mi")]
+    [DataRow(0U, DataSizeUnit.Mebibyte, "0Mi")]
+    [DataRow(1U, DataSizeUnit.Mebibyte, "1Mi")]
+    [DataRow(10U, DataSizeUnit.Mebibyte, "10Mi")]
+    [DataRow(512U, DataSizeUnit.Mebibyte, "512Mi")]
+    [DataRow(99999999U, DataSizeUnit.Mebibyte, "99999999Mi")]
     [TestMethod]
     public void Parse_WithGivenString_ReturnsExpectedValues(uint expectedCount, DataSizeUnit expectedUnit, string str)
     {

@@ -11,7 +11,7 @@ public record DataSize(uint Count, DataSizeUnit Unit)
         
         string GetSuffix() => Unit switch
         {
-            DataSizeUnit.Mibibyte => "Mi",
+            DataSizeUnit.Mebibyte => "Mi",
             DataSizeUnit.Gibibyte => "Gi",
         };
     }
@@ -23,7 +23,7 @@ public record DataSize(uint Count, DataSizeUnit Unit)
         var count = uint.Parse(match.Groups["count"].Value);
         var unit = match.Groups["unit"].Value switch
         {
-            "Mi" => DataSizeUnit.Mibibyte,
+            "Mi" => DataSizeUnit.Mebibyte,
             "Gi" => DataSizeUnit.Gibibyte,
         };
         var value = new DataSize(count, unit);

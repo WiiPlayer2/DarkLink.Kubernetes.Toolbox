@@ -6,5 +6,5 @@ public enum DataSizeUnit
 {
     Gibibyte,
 
-    Mibibyte,
+    Mebibyte,
 }
