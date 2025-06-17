@@ -8,7 +8,7 @@ public record PersistentVolumeClaim(
 {
     [Obsolete]
     public PersistentVolumeClaim(ResourceMetadata metadata, StorageClassName storageClassName)
-        : this(metadata, storageClassName, new(new(new(1, DataSizeUnit.Gigabyte)))) { }
+        : this(metadata, storageClassName, new(new(new(1, DataSizeUnit.Gibibyte)))) { }
     
     public Option<ResourceName> VolumeName { get; init; }
     

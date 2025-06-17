@@ -4,5 +4,7 @@ namespace DarkLink.Kubernetes.Toolbox.Domain;
 
 public enum DataSizeUnit
 {
-    Gigabyte,
+    Gibibyte,
+
+    Mibibyte,
 }
