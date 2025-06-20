@@ -104,7 +104,7 @@ public class YamlNodeAccessorTest
         var result = subject.Get<YamlNode.YamlScalar.YamlNodeString>(path);
 
         // Assert
-        result.ShouldBeFail(x => x.Should().BeEquivalentTo([expected]));
+        result.ShouldBeFail(x => x.Should().Equal([expected]));
     }
     
     [DynamicData(nameof(NonMapNodes))]
@@ -116,13 +116,13 @@ public class YamlNodeAccessorTest
         var expected = YamlNodeAccessFailure.UnexpectedType(
             typeof(YamlNode.YamlNodeMap),
             subject.GetType(),
-            path);
+            YamlPath.This());
 
         // Act
         var result = subject.Get(path);
 
         // Assert
-        result.ShouldBeFail(x => x.Should().BeEquivalentTo([expected]));
+        result.ShouldBeFail(x => x.Should().Equal([expected]));
     }
     
     [DynamicData(nameof(NonListNodes))]
@@ -134,13 +134,13 @@ public class YamlNodeAccessorTest
         var expected = YamlNodeAccessFailure.UnexpectedType(
             typeof(YamlNode.YamlNodeList),
             subject.GetType(),
-            path);
+            YamlPath.This());
 
         // Act
         var result = subject.Get(path);
 
         // Assert
-        result.ShouldBeFail(x => x.Should().BeEquivalentTo([expected]));
+        result.ShouldBeFail(x => x.Should().Equal([expected]));
     }
 
     [TestMethod]
@@ -148,14 +148,14 @@ public class YamlNodeAccessorTest
     {
         // Arrange
         var path = YamlPath.ListItem(YamlListIndex.From(1), YamlPath.This());
-        var expected = YamlNodeAccessFailure.OutOfRange(path);
+        var expected = YamlNodeAccessFailure.OutOfRange(YamlPath.This());
         var subject = YamlNode.List(List(YamlNode.String("henlo")));
 
         // Act
         var result = subject.Get(path);
 
         // Assert
-        result.ShouldBeFail(x => x.Should().BeEquivalentTo([expected]));
+        result.ShouldBeFail(x => x.Should().Equal([expected]));
     }
 
     [TestMethod]
@@ -163,14 +163,29 @@ public class YamlNodeAccessorTest
     {
         // Arrange
         var path = YamlPath.MapItem(YamlMapKey.From("key"), YamlPath.This());
-        var expected = YamlNodeAccessFailure.OutOfRange(path);
+        var expected = YamlNodeAccessFailure.OutOfRange(YamlPath.This());
         var subject = YamlNode.Map(Map((YamlMapKey.From("otherKey"), YamlNode.String("henlo"))));
 
         // Act
         var result = subject.Get(path);
 
         // Assert
-        result.ShouldBeFail(x => x.Should().BeEquivalentTo([expected]));
+        result.ShouldBeFail(x => x.Should().Equal([expected]));
+    }
+
+    [TestMethod]
+    public void Get_WithUpperLevelFailureOnNestedStructure_ReturnsUpperLevelPath()
+    {
+        // Arrange
+        var path = YamlPath.MapItem(YamlMapKey.From("key"), YamlPath.ListItem(YamlListIndex.From(0), YamlPath.This()));
+        var expected = YamlNodeAccessFailure.OutOfRange(YamlPath.This());
+        var subject = YamlNode.Map(Map((YamlMapKey.From("otherKey"), YamlNode.String("henlo"))));
+
+        // Act
+        var result = subject.Get(path);
+
+        // Assert
+        result.ShouldBeFail(x => x.Should().Equal([expected]));
     }
 
     private static IEnumerable<object[]> NonMapNodes

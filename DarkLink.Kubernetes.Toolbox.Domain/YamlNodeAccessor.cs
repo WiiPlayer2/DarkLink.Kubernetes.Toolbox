@@ -4,8 +4,13 @@ namespace DarkLink.Kubernetes.Toolbox.Domain;
 
 public static class YamlNodeAccessor
 {
-    public static Validation<YamlNodeAccessFailure, YamlNode> Get(this YamlNode subject, YamlPath path)
+    public static Validation<YamlNodeAccessFailure, YamlNode> Get(this YamlNode subject, YamlPath path) =>
+        subject.GetInternal(path, x => x);
+        
+    private static Validation<YamlNodeAccessFailure, YamlNode> GetInternal(this YamlNode subject, YamlPath path, Func<YamlPath, YamlPath> buildFailurePath)
     {
+        var failurePath = buildFailurePath(YamlPath.This());
+        
         return path.Match(
             @this => subject,
             MapItem,
@@ -23,13 +28,13 @@ public static class YamlNodeAccessor
 
             Validation<YamlNodeAccessFailure, YamlNode> GetMapItem(YamlNode.YamlNodeMap map) =>
                 map.Values.ContainsKey(mapItem.Key)
-                    ? Get(map.Values[mapItem.Key], mapItem.Next)
-                    : YamlNodeAccessFailure.OutOfRange(path);
+                    ? GetInternal(map.Values[mapItem.Key], mapItem.Next, x => buildFailurePath(mapItem with {Next = YamlPath.This(),}))
+                    : YamlNodeAccessFailure.OutOfRange(failurePath);
             
             YamlNodeAccessFailure Failure<T>() => YamlNodeAccessFailure.UnexpectedType(
                 typeof(YamlNode.YamlNodeMap),
                 typeof(T),
-                path);
+                failurePath);
         }
 
         Validation<YamlNodeAccessFailure, YamlNode> ListItem(YamlPath.YamlPathListItem listItem)
@@ -44,13 +49,13 @@ public static class YamlNodeAccessor
 
             Validation<YamlNodeAccessFailure, YamlNode> GetListItem(YamlNode.YamlNodeList list) =>
                 listItem.Index.Value >= 0 && listItem.Index.Value < list.Values.Count
-                    ? Get(list.Values[listItem.Index.Value], listItem.Next)
-                    : YamlNodeAccessFailure.OutOfRange(path);
+                    ? GetInternal(list.Values[listItem.Index.Value], listItem.Next, x => buildFailurePath(listItem with {Next = YamlPath.This(),}))
+                    : YamlNodeAccessFailure.OutOfRange(failurePath);
             
             YamlNodeAccessFailure Failure<T>() => YamlNodeAccessFailure.UnexpectedType(
                 typeof(YamlNode.YamlNodeList),
                 typeof(T),
-                path);
+                failurePath);
         }
     }
 
