@@ -88,4 +88,82 @@ public class YamlNodeAccessorTest
         // Assert
         result.ShouldBeSuccess(x => x.Should().Be(expected));
     }
+    
+    [TestMethod]
+    public void GetT_WithGettingDifferentTypeThenProvided_ReturnsUnexpectedTypeFailure()
+    {
+        // Arrange
+        var path = YamlPath.This();
+        var expected = YamlNodeAccessFailure.UnexpectedType(
+            typeof(YamlNode.YamlScalar.YamlNodeString),
+            typeof(YamlNode.YamlScalar.YamlNodeBool),
+            path);
+        var subject = YamlNode.Bool(true);
+
+        // Act
+        var result = subject.Get<YamlNode.YamlScalar.YamlNodeString>(path);
+
+        // Assert
+        result.ShouldBeFail(x => x.Should().BeEquivalentTo([expected]));
+    }
+    
+    [DynamicData(nameof(NonMapNodes))]
+    [TestMethod]
+    public void Get_WithMapItemOnNonMap_ReturnsUnexpectedTypeFailure(YamlNode subject)
+    {
+        // Arrange
+        var path = YamlPath.MapItem(YamlMapKey.From("key"), YamlPath.This());
+        var expected = YamlNodeAccessFailure.UnexpectedType(
+            typeof(YamlNode.YamlNodeMap),
+            subject.GetType(),
+            path);
+
+        // Act
+        var result = subject.Get(path);
+
+        // Assert
+        result.ShouldBeFail(x => x.Should().BeEquivalentTo([expected]));
+    }
+    
+    [DynamicData(nameof(NonListNodes))]
+    [TestMethod]
+    public void Get_WithListItemOnNonList_ReturnsUnexpectedTypeFailure(YamlNode subject)
+    {
+        // Arrange
+        var path = YamlPath.ListItem(YamlListIndex.From(0), YamlPath.This());
+        var expected = YamlNodeAccessFailure.UnexpectedType(
+            typeof(YamlNode.YamlNodeList),
+            subject.GetType(),
+            path);
+
+        // Act
+        var result = subject.Get(path);
+
+        // Assert
+        result.ShouldBeFail(x => x.Should().BeEquivalentTo([expected]));
+    }
+
+    private static IEnumerable<object[]> NonMapNodes
+    {
+        get
+        {
+            yield return [YamlNode.List(List<YamlNode>())];
+            yield return [YamlNode.String(string.Empty)];
+            yield return [YamlNode.Bool(default)];
+            yield return [YamlNode.Number(default)];
+            yield return [YamlNode.Null()];
+        }
+    }
+
+    private static IEnumerable<object[]> NonListNodes
+    {
+        get
+        {
+            yield return [YamlNode.Map(Map<YamlMapKey, YamlNode>())];
+            yield return [YamlNode.String(string.Empty)];
+            yield return [YamlNode.Bool(default)];
+            yield return [YamlNode.Number(default)];
+            yield return [YamlNode.Null()];
+        }
+    }
 }
