@@ -14,13 +14,18 @@ public static class YamlNodeAccessor
         Validation<YamlNodeAccessFailure, YamlNode> MapItem(YamlPath.YamlPathMapItem mapItem)
         {
             return subject.Match(
-                map => Get(map.Values[mapItem.Key], mapItem.Next),
+                GetMapItem,
                 list => Failure<YamlNode.YamlNodeList>(),
                 @string => Failure<YamlNode.YamlScalar.YamlNodeString>(),
                 @bool => Failure<YamlNode.YamlScalar.YamlNodeBool>(),
                 number => Failure<YamlNode.YamlScalar.YamlNodeNumber>(),
                 @null => Failure<YamlNode.YamlScalar.YamlNodeNull>());
 
+            Validation<YamlNodeAccessFailure, YamlNode> GetMapItem(YamlNode.YamlNodeMap map) =>
+                map.Values.ContainsKey(mapItem.Key)
+                    ? Get(map.Values[mapItem.Key], mapItem.Next)
+                    : YamlNodeAccessFailure.OutOfRange(path);
+            
             YamlNodeAccessFailure Failure<T>() => YamlNodeAccessFailure.UnexpectedType(
                 typeof(YamlNode.YamlNodeMap),
                 typeof(T),
@@ -31,12 +36,17 @@ public static class YamlNodeAccessor
         {
             return subject.Match(
                 map => Failure<YamlNode.YamlNodeMap>(),
-                list => Get(list.Values[listItem.Index.Value], listItem.Next),
+                GetListItem,
                 @string => Failure<YamlNode.YamlScalar.YamlNodeString>(),
                 @bool => Failure<YamlNode.YamlScalar.YamlNodeBool>(),
                 number => Failure<YamlNode.YamlScalar.YamlNodeNumber>(),
                 @null => Failure<YamlNode.YamlScalar.YamlNodeNull>());
 
+            Validation<YamlNodeAccessFailure, YamlNode> GetListItem(YamlNode.YamlNodeList list) =>
+                listItem.Index.Value >= 0 && listItem.Index.Value < list.Values.Count
+                    ? Get(list.Values[listItem.Index.Value], listItem.Next)
+                    : YamlNodeAccessFailure.OutOfRange(path);
+            
             YamlNodeAccessFailure Failure<T>() => YamlNodeAccessFailure.UnexpectedType(
                 typeof(YamlNode.YamlNodeList),
                 typeof(T),

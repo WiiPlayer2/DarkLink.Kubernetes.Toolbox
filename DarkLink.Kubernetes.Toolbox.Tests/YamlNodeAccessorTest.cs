@@ -143,6 +143,36 @@ public class YamlNodeAccessorTest
         result.ShouldBeFail(x => x.Should().BeEquivalentTo([expected]));
     }
 
+    [TestMethod]
+    public void Get_WithOutOfRangeListItem_ReturnsOutOfRangeFailure()
+    {
+        // Arrange
+        var path = YamlPath.ListItem(YamlListIndex.From(1), YamlPath.This());
+        var expected = YamlNodeAccessFailure.OutOfRange(path);
+        var subject = YamlNode.List(List(YamlNode.String("henlo")));
+
+        // Act
+        var result = subject.Get(path);
+
+        // Assert
+        result.ShouldBeFail(x => x.Should().BeEquivalentTo([expected]));
+    }
+
+    [TestMethod]
+    public void Get_WithOutOfRangeMapItem_ReturnsOutOfRangeFailure()
+    {
+        // Arrange
+        var path = YamlPath.MapItem(YamlMapKey.From("key"), YamlPath.This());
+        var expected = YamlNodeAccessFailure.OutOfRange(path);
+        var subject = YamlNode.Map(Map((YamlMapKey.From("otherKey"), YamlNode.String("henlo"))));
+
+        // Act
+        var result = subject.Get(path);
+
+        // Assert
+        result.ShouldBeFail(x => x.Should().BeEquivalentTo([expected]));
+    }
+
     private static IEnumerable<object[]> NonMapNodes
     {
         get

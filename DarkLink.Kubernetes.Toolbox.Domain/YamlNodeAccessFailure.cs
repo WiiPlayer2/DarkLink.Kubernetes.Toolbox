@@ -7,4 +7,6 @@ namespace DarkLink.Kubernetes.Toolbox.Domain;
 public abstract partial record YamlNodeAccessFailure(YamlPath Path)
 {
     public record UnexpectedType_(Type Expected, Type Actual, YamlPath Path) : YamlNodeAccessFailure(Path);
+
+    public record OutOfRange_(YamlPath Path) : YamlNodeAccessFailure(Path);
 }
