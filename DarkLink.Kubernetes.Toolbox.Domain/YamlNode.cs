@@ -39,18 +39,3 @@ public abstract partial record YamlNode
         }
     }
 }
-
-public record PersistentVolumeClaimV2(YamlNode.YamlNodeMap Values)
-{
-    public string StorageClassName
-    {
-        get => Values
-            .Get<YamlNode.YamlScalar.YamlNodeString>(YamlPath.MapItem(YamlMapKey.From("spec"), YamlPath.MapItem(YamlMapKey.From("storageClassName"), YamlPath.This())))
-            .IfFail(() => throw new NotImplementedException())
-            .Value;
-        init => Values = Values with
-        {
-            Values = Values.Values.SetItem(YamlMapKey.From("spec"), YamlNode.String(value)),
-        };
-    }
-}

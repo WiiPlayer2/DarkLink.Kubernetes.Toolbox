@@ -69,7 +69,7 @@ public static class YamlNodeAccessor
     public static Validation<YamlNodeAccessFailure, YamlNode> Set(this YamlNode subject, YamlPath path, YamlNode value) =>
         subject.SetInternal(path, value, x => x);
     
-    public static Validation<YamlNodeAccessFailure, YamlNode> SetInternal(this YamlNode subject, YamlPath path, YamlNode value, Func<YamlPath, YamlPath> buildFailurePath)
+    private static Validation<YamlNodeAccessFailure, YamlNode> SetInternal(this YamlNode subject, YamlPath path, YamlNode value, Func<YamlPath, YamlPath> buildFailurePath)
     {
         var failurePath = buildFailurePath(YamlPath.This());
         
