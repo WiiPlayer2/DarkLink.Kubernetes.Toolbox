@@ -188,6 +188,38 @@ public class YamlNodeAccessorTest
         result.ShouldBeFail(x => x.Should().Equal([expected]));
     }
 
+    [TestMethod]
+    public void Set_WithThis_ReturnsValueToSet()
+    {
+        // Arrange
+        var subject = YamlNode.String("henlo");
+        var expected = YamlNode.Bool(true);
+        var path = YamlPath.This();
+
+        // Act
+        var result = subject.Set(path, expected);
+
+        // Assert
+        result.ShouldBeSuccess(x => x.Should().Be(expected));
+    }
+
+    [TestMethod]
+    public void Set_WithMapItemOnMap_ReturnsMapItemSet()
+    {
+        // Arrange
+        var subject = YamlNode.Map(Map<YamlMapKey, YamlNode>());
+        var value = YamlNode.String("henlo");
+        var yamlMapKey = YamlMapKey.From("key");
+        var path = YamlPath.MapItem(yamlMapKey, YamlPath.This());
+        var expected = YamlNode.Map(Map((yamlMapKey, value)));
+
+        // Act
+        var result = subject.Set(path, value);
+
+        // Assert
+        result.ShouldBeSuccess(x => x.Should().Be(expected));
+    }
+
     private static IEnumerable<object[]> NonMapNodes
     {
         get
