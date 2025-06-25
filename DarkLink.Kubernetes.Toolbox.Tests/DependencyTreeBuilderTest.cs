@@ -24,7 +24,7 @@ public class DependencyTreeBuilderTest
     public void Build_WithSinglePodAndSingleReferencedPersistentVolumeClaim_ReturnsBothInTree()
     {
         // Arrange
-        var pods = Seq1(new Pod(new(ResourceName.From("pods"), ResourceNamespace.From("ns")))
+        var pods = Seq1(new Pod(new ResourceMetadata(ResourceName.From("pods"), ResourceNamespace.From("ns")))
         {
             Volumes = [
                 PodVolume.PersistentVolumeClaim(ResourceName.From("pvc")),
@@ -44,7 +44,7 @@ public class DependencyTreeBuilderTest
     public void Build_WithSinglePodReferencingASinglePvc_ReturnsOnlyThisDependency()
     {
         // Arrange
-        var pods = Seq1(new Pod(new(ResourceName.From("pods"), ResourceNamespace.From("ns")))
+        var pods = Seq1(new Pod(new ResourceMetadata(ResourceName.From("pods"), ResourceNamespace.From("ns")))
         {
             Volumes = [
                 PodVolume.PersistentVolumeClaim(ResourceName.From("pvc")),
@@ -66,7 +66,7 @@ public class DependencyTreeBuilderTest
     public void Build_WithSinglePodReferencingASinglePvcInSameNamespace_ReturnsOnlyThisDependency()
     {
         // Arrange
-        var pods = Seq1(new Pod(new(ResourceName.From("pods"), ResourceNamespace.From("ns")))
+        var pods = Seq1(new Pod(new ResourceMetadata(ResourceName.From("pods"), ResourceNamespace.From("ns")))
         {
             Volumes = [
                 PodVolume.PersistentVolumeClaim(ResourceName.From("pvc")),
@@ -89,14 +89,14 @@ public class DependencyTreeBuilderTest
     {
         // Arrange
         var pods = Seq(
-            new Pod(new(ResourceName.From("pod"), ResourceNamespace.From("ns")))
+            new Pod(new ResourceMetadata(ResourceName.From("pod"), ResourceNamespace.From("ns")))
             {
                 Volumes =
                 [
                     PodVolume.PersistentVolumeClaim(ResourceName.From("pvc")),
                 ],
             },
-            new Pod(new(ResourceName.From("pod2"), ResourceNamespace.From("ns"))));
+            new Pod(new ResourceMetadata(ResourceName.From("pod2"), ResourceNamespace.From("ns"))));
         var pvcs = Seq1(
             new PersistentVolumeClaim(new(ResourceName.From("pvc"), ResourceNamespace.From("ns")), StorageClassName.From("nfs")));
         var expected = new DependencyTree(Map((pods.Head, new PodDependency(Seq1(NfsDependency.Pvc(pvcs.Head))))));
@@ -113,7 +113,7 @@ public class DependencyTreeBuilderTest
     {
         // Arrange
         var pods = Seq(
-            new Pod(new(ResourceName.From("pod"), ResourceNamespace.From("ns")))
+            new Pod(new ResourceMetadata(ResourceName.From("pod"), ResourceNamespace.From("ns")))
             {
                 Volumes =
                 [
@@ -121,7 +121,7 @@ public class DependencyTreeBuilderTest
                     PodVolume.PersistentVolumeClaim(ResourceName.From("pvc2")),
                 ],
             },
-            new Pod(new(ResourceName.From("pod2"), ResourceNamespace.From("ns"))));
+            new Pod(new ResourceMetadata(ResourceName.From("pod2"), ResourceNamespace.From("ns"))));
         var pvcs = Seq(
             new PersistentVolumeClaim(new(ResourceName.From("pvc"), ResourceNamespace.From("ns")), StorageClassName.From("nfs")),
             new PersistentVolumeClaim(new(ResourceName.From("pvc2"), ResourceNamespace.From("ns")), StorageClassName.From("not-nfs")));
@@ -140,14 +140,14 @@ public class DependencyTreeBuilderTest
     {
         // Arrange
         var pods = Seq(
-            new Pod(new(ResourceName.From("pod"), ResourceNamespace.From("ns")))
+            new Pod(new ResourceMetadata(ResourceName.From("pod"), ResourceNamespace.From("ns")))
             {
                 Volumes =
                 [
                     PodVolume.Nfs(Hostname.From("nfs.server")),
                 ],
             },
-            new Pod(new(ResourceName.From("pod2"), ResourceNamespace.From("ns"))));
+            new Pod(new ResourceMetadata(ResourceName.From("pod2"), ResourceNamespace.From("ns"))));
         var pvcs = Seq<PersistentVolumeClaim>();
         var expected = new DependencyTree(Map((pods.Head, new PodDependency(Seq1(NfsDependency.Mount((PodVolume.Nfs_) pods.Head.Volumes.Head()))))));
         
@@ -163,7 +163,7 @@ public class DependencyTreeBuilderTest
     {
         // Arrange
         var pods = Seq(
-            new Pod(new(ResourceName.From("pod"), ResourceNamespace.From("ns")))
+            new Pod(new ResourceMetadata(ResourceName.From("pod"), ResourceNamespace.From("ns")))
             {
                 Volumes =
                 [
@@ -171,7 +171,7 @@ public class DependencyTreeBuilderTest
                 ],
                 Status = new PodStatus(PodStatusPhase.From("Running")),
             },
-            new Pod(new(ResourceName.From("pod2"), ResourceNamespace.From("ns")))
+            new Pod(new ResourceMetadata(ResourceName.From("pod2"), ResourceNamespace.From("ns")))
             {
                 Volumes =
                 [

@@ -14,8 +14,13 @@ public abstract partial record PodVolume
 [ValueObject<string>]
 public partial record Hostname;
 
-public record Pod(ResourceMetadata Metadata) : Resource(Metadata), IComparable<Pod>
+public record Pod(YamlNode Yaml) : Resource(Yaml), IComparable<Pod>
 {
+    public Pod(ResourceMetadata Metadata) : this(YamlNode.Null())
+    {
+        this.Metadata = Metadata;
+    }
+
     public IReadOnlyCollection<PodVolume> Volumes { get; init; } = [];
 
     public PodStatus Status { get; init; } = new(PodStatusPhase.From("Running"));

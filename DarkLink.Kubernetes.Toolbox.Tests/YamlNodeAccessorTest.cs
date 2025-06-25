@@ -220,6 +220,27 @@ public class YamlNodeAccessorTest
         result.ShouldBeSuccess(x => x.Should().Be(expected));
     }
 
+    [TestMethod]
+    public void Set_WithDeeplyNestedMapItemOnMap_ReturnsMapItemSet()
+    {
+        // Arrange
+        var subject = YamlNode.Map(Map<YamlMapKey, YamlNode>());
+        var value = YamlNode.String("henlo");
+        var yamlMapKey1 = YamlMapKey.From("key");
+        var yamlMapKey2 = YamlMapKey.From("key2");
+        var yamlMapKey3 = YamlMapKey.From("key3");
+        var path = YamlPath.MapItem(yamlMapKey1, YamlPath.MapItem(yamlMapKey2, YamlPath.MapItem(yamlMapKey3, YamlPath.This())));
+        var expected = YamlNode.Map(Map((yamlMapKey1,
+            YamlNode.Map(Map((yamlMapKey2,
+                YamlNode.Map(Map((yamlMapKey3, value)))))))));
+
+        // Act
+        var result = subject.Set(path, value);
+
+        // Assert
+        result.ShouldBeSuccess(x => x.Should().Be(expected));
+    }
+
     private static IEnumerable<object[]> NonMapNodes
     {
         get
