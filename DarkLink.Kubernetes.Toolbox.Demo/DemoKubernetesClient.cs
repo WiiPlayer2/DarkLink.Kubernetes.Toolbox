@@ -8,7 +8,7 @@ namespace DarkLink.Kubernetes.Toolbox.Demo;
 public class DemoKubernetesClient<RT> : IKubernetesClient<RT> where RT : struct, HasCancel<RT>
 {
     public Aff<RT, Seq<Pod>> GetPods() => SuccessAff(Seq1(
-        new Pod(new(ResourceName.From("pod1"), ResourceNamespace.From("ns1")))
+        new Pod(new ResourceMetadata(ResourceName.From("pod1"), ResourceNamespace.From("ns1")))
         {
             Volumes = [
                 PodVolume.PersistentVolumeClaim(ResourceName.From("pvc1")), 

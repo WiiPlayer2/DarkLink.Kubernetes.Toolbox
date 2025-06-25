@@ -10,7 +10,7 @@ public class KubernetesClient<RT>(k8s.Kubernetes k8s) : IKubernetesClient<RT> wh
 {
     public Aff<RT, Seq<Pod>> GetPods() =>
         from pods in Aff((RT rt) => k8s.ListPodForAllNamespacesAsync(cancellationToken: rt.CancellationToken).ToValue())
-        let mappedPods = pods.Items.Select(x => new Pod(new(ResourceName.From(x.Metadata.Name), ResourceNamespace.From(x.Metadata.NamespaceProperty)))
+        let mappedPods = pods.Items.Select(x => new Pod(new ResourceMetadata(ResourceName.From(x.Metadata.Name), ResourceNamespace.From(x.Metadata.NamespaceProperty)))
             {
                 Volumes = (x.Spec.Volumes ?? [])
                     .Select(x => x.PersistentVolumeClaim is not null
