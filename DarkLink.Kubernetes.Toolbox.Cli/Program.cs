@@ -49,6 +49,9 @@ async Task RunAuxCliCommand(InvocationContext context, Func<InvocationContext, T
 
         var cliResult = await Cli.Wrap($"k8s-toolbox-{tool}")
             .WithArguments(args)
+            .WithStandardOutputPipe(PipeTarget.ToStream(Console.OpenStandardOutput()))
+            .WithStandardErrorPipe(PipeTarget.ToStream(Console.OpenStandardError()))
+            .WithStandardInputPipe(PipeSource.FromStream(Console.OpenStandardInput()))
             .WithValidation(CommandResultValidation.None)
             .ExecuteAsync(context.GetCancellationToken());
         
