@@ -1,5 +1,10 @@
 [
   {
+    "pname": "CliWrap",
+    "version": "3.9.0",
+    "hash": "sha256-WC1bX8uy+8VZkrV6eK8nJ24Uy81Bj4Aao27OsP1sGyE="
+  },
+  {
     "pname": "Fractions",
     "version": "7.3.0",
     "hash": "sha256-wr4I1mj1qrXjD2Z3dca70OBe14zZNGagDLW9/8xQtCU="
