@@ -20,7 +20,7 @@ return await new CommandLineBuilder(new RootCommand()
         new DependenciesCommand(),
     })
     .UseDefaults()
-    .AddMiddleware(RunAuxCliCommand)
+    .AddMiddleware(RunAuxCliCommand, MiddlewareOrder.ExceptionHandler)
     .UseHost(
         args => new HostBuilder().ConfigureDefaults(args),
         hostBuilder => UseCommandHandlers<Runtime>(hostBuilder)
